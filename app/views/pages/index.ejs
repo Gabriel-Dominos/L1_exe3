@@ -14,7 +14,8 @@
         <label for="salario">Digite o salário:</label><br>
 
         <input 
-            type="text" 
+            type="number"
+            step="0.1"
             name="salario" 
             id="salario"
             value="<%= valores.salario %>"
@@ -28,15 +29,37 @@
 
     <% if(retorno){ %>
 
-        <h2>Resultado</h2>
+        <% if(retorno.erro){ %>
 
-        <p>Salário antes do reajuste: R$ <%= retorno.salario %></p>
+            <h2 style="color:red;">
+                <%= retorno.erro %>
+            </h2>
 
-        <p>Percentual aplicado: <%= retorno.percentual %>%</p>
+        <% } else { %>
 
-        <p>Valor do aumento: R$ <%= retorno.aumento %></p>
+            <h2>Resultado</h2>
 
-        <p>Novo salário: R$ <%= retorno.novoSalario %></p>
+            <p>
+                Salário antes do reajuste:
+                R$ <%= retorno.salario %>
+            </p>
+
+            <p>
+                Percentual aplicado:
+                <%= retorno.percentual %>%
+            </p>
+
+            <p>
+                Valor do aumento:
+                R$ <%= retorno.aumento %>
+            </p>
+
+            <p>
+                Novo salário:
+                R$ <%= retorno.novoSalario %>
+            </p>
+
+        <% } %>
 
     <% } else { %>
 
