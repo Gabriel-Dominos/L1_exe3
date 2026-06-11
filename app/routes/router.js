@@ -1,74 +1,78 @@
 const express = require("express");
+
 const router = express.Router();
 
 router.get("/", (req, res) => {
     res.render("pages/index", {
         retorno: null,
         valores: {
-            salario: ""
+            nota1: "",
+            nota2: ""
         },
         erros: {}
     });
 });
 
-router.post("/reajuste", (req, res) => {
+router.post("/classificar", (req, res) => {
 
-    // recuperar salário
-    let salario = parseFloat(req.body.salario);
+    // recuperar notas
+    let nota1 = parseFloat(req.body.nota1);
+    let nota2 = parseFloat(req.body.nota2);
 
     // validação
-    if (isNaN(salario) || salario <= 0) {
+    if (
+        isNaN(nota1) ||
+        isNaN(nota2) ||
+        nota1 < 0 || nota1 > 10 ||
+        nota2 < 0 || nota2 > 10
+    ) {
 
         return res.render("pages/index", {
             retorno: {
-                erro: "Digite um salário válido."
+                erro: "Digite notas válidas entre 0 e 10."
             },
             valores: {
-                salario: req.body.salario
+                nota1: req.body.nota1,
+                nota2: req.body.nota2
             },
             erros: {
-                salario: true
+                nota1: true,
+                nota2: true
             }
         });
     }
 
-    // classificação do percentual
-    let percentual = 0;
+    // calcular média
+    let media = (nota1 + nota2) / 2;
 
-    if (salario <= 1400) {
-        percentual = 15;
+    // classificar
+    let notafinal;
 
-    } else if (salario <= 4500) {
-        percentual = 10;
-
-    } else if (salario <= 10000) {
-        percentual = 7.5;
-
+    if (media > 9 && media <= 10) {
+        notafinal = "A";
+    } else if (media > 7.5 && media <= 9) {
+        notafinal = "B";
+    } else if (media > 6 && media <= 7.5) {
+        notafinal = "C";
+    } else if (media > 4 && media <= 6) {
+        notafinal = "D";
     } else {
-        percentual = 5;
+        notafinal = "E";
     }
 
-    // cálculo do aumento
-    let aumento = salario * (percentual / 100);
-
-    // novo salário
-    let novoSalario = salario + aumento;
-
     let objJson = {
-        salario: salario.toFixed(2),
-        percentual: percentual,
-        aumento: aumento.toFixed(2),
-        novoSalario: novoSalario.toFixed(2)
+        notafinal,
+        media: media.toFixed(2)
     };
 
     res.render("pages/index", {
         retorno: objJson,
         valores: {
-            salario: req.body.salario
+            nota1: req.body.nota1,
+            nota2: req.body.nota2
         },
         erros: {}
     });
-
 });
 
 module.exports = router;
