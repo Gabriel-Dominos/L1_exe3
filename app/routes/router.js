@@ -4,7 +4,10 @@ const router = express.Router();
 router.get("/", (req, res) => {
     res.render("pages/index", {
         retorno: null,
-        valores: { salario: "" }
+        valores: {
+            salario: ""
+        },
+        erros: {}
     });
 });
 
@@ -13,15 +16,18 @@ router.post("/reajuste", (req, res) => {
     // recuperar salário
     let salario = parseFloat(req.body.salario);
 
-    // VALIDAÇÃO
+    // validação
     if (isNaN(salario) || salario <= 0) {
 
         return res.render("pages/index", {
             retorno: {
-                erro: "Digite um salário válido"
+                erro: "Digite um salário válido."
             },
             valores: {
                 salario: req.body.salario
+            },
+            erros: {
+                salario: true
             }
         });
     }
@@ -48,7 +54,6 @@ router.post("/reajuste", (req, res) => {
     // novo salário
     let novoSalario = salario + aumento;
 
-    // objeto retorno
     let objJson = {
         salario: salario.toFixed(2),
         percentual: percentual,
@@ -56,12 +61,12 @@ router.post("/reajuste", (req, res) => {
         novoSalario: novoSalario.toFixed(2)
     };
 
-    // renderização
     res.render("pages/index", {
         retorno: objJson,
         valores: {
             salario: req.body.salario
-        }
+        },
+        erros: {}
     });
 
 });
