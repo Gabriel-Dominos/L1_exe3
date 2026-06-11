@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reajuste Salarial</title>
+
+    <style>
+        .erro-input {
+            border: 2px solid red;
+            background-color: #ffe6e6;
+        }
+
+        .mensagem-erro {
+            color: red;
+            font-size: 14px;
+        }
+
+        .resultado {
+            color: green;
+        }
+    </style>
 </head>
 <body>
 
@@ -11,17 +27,32 @@
 
     <form action="/reajuste" method="post">
 
-        <label for="salario">Digite o salário:</label><br>
+        <label for="salario">Digite o salário:</label>
+        <br>
 
-        <input 
+        <input
             type="number"
             step="0.1"
-            name="salario" 
+            name="salario"
             id="salario"
             value="<%= valores.salario %>"
-        ><br><br>
+            class="<%= erros.salario ? 'erro-input' : '' %>"
+        >
 
-        <button type="submit">Calcular</button>
+        <br>
+
+        <% if (erros.salario) { %>
+            <span class="mensagem-erro">
+                Informe um salário maior que zero.
+            </span>
+            <br>
+        <% } %>
+
+        <br>
+
+        <button type="submit">
+            Calcular
+        </button>
 
     </form>
 
@@ -37,7 +68,7 @@
 
         <% } else { %>
 
-            <h2>Resultado</h2>
+            <h2 class="resultado">Resultado</h2>
 
             <p>
                 Salário antes do reajuste:
@@ -60,10 +91,6 @@
             </p>
 
         <% } %>
-
-    <% } else { %>
-
-        <h2>Nenhum cálculo realizado.</h2>
 
     <% } %>
 
